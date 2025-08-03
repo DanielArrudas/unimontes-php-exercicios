@@ -27,17 +27,16 @@ $resultado = PrintNameAndAge();
 </head>
 
 <body>
+    <h1>Verificador de Idade</h1>
     <form action="index.php" method="post">
-
-
         <div>
             <label for="nome">Nome:</label>
-            <input type="text" placeholder="Digite seu nome" name="nome" required>
+            <input type="text" placeholder="Digite seu nome" name="nome" id="nome" required>
         </div>
         <br>
         <div>
             <label for="data_nascimento">Ano de Nascimento:</label>
-            <input type="date" name="data_nascimento" max="<?= date("Y-m-d") ?>" required>
+            <input type="date" name="data_nascimento" id="data_nascimento" max="<?= date("Y-m-d") ?>" required>
         </div>
         <br>
         <div>

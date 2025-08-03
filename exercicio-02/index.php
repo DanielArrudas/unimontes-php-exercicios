@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'add' => $firstValue + $secondValue,
             'subtract' => $firstValue - $secondValue,
             'multiply' => $firstValue * $secondValue,
-            'divide' => $secondValue === 0 ? "<p>Error: Division by Zero!</p>" : ($firstValue / $secondValue),
-            default => 'Error: Invalid Operator.',
+            'divide' => $secondValue === 0 ? "<p>Error: Divisão por zero!</p>" : ($firstValue / $secondValue),
+            default => 'Error: Operador invalido.',
         };
     }
 }
@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <h1>Calculadora Aritmética Simples</h1>
     <form action="index.php" method="post" id="calculator">
         <input type="number" name="firstValue" placeholder="Digite o primeiro valor" required>
         <select name="operator" id="operator" form="calculator" required>

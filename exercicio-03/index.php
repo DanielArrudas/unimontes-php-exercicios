@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['valor']) && !empty($
     <h1>Conversor de Moedas</h1>
     <form action="index.php" method="post">
         <label for="valor">Insira o valor em reais:</label>
-        <input type="number" placeholder="00.00" min="0.01" step=".01" name="valor" required>
+        <input type="number" placeholder="00.00" min="0.01" step=".01" name="valor" id="valor" required>
         <select name="moeda" required>
             <option value="" disabled selected>--- Moeda para conversão ---:</option>
             <option value="dolar">Dólar</option>
