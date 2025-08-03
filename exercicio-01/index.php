@@ -31,12 +31,12 @@ $resultado = PrintNameAndAge();
 
 
         <div>
-            <label>Nome:</label>
+            <label for="nome">Nome:</label>
             <input type="text" placeholder="Digite seu nome" name="nome" required>
         </div>
         <br>
         <div>
-            <label>Ano de Nascimento:</label>
+            <label for="data_nascimento">Ano de Nascimento:</label>
             <input type="date" name="data_nascimento" max="<?= date("Y-m-d") ?>" required>
         </div>
         <br>
