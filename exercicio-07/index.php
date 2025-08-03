@@ -16,7 +16,7 @@ if (isset($_POST['limpar'])) {
 
 $mensagemResultado = null;
 if (
-    $_SERVER['REQUEST_METHOD'] == 'POST'
+    $_SERVER['REQUEST_METHOD'] === 'POST'
     && !empty($_POST['nome'])
     && !empty($_POST['matricula'])
     && !empty($_POST['curso'])
