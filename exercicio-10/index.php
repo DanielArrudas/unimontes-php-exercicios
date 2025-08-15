@@ -27,8 +27,16 @@ if (
             break;
         }
     }
-    $compromisso = new Compromisso($data, $horario, $descricao);
-
+    if ($choqueCompromisso) {
+            $mensagemResultado = "Erro: Produto já cadastrado.";
+        } else {
+            $compromisso = new Compromisso($data, $horario, $descricao);
+            $_SESSION['compromisso'][] = $compromisso;
+            $mensagemResultado = "Compromisso adicionado com sucesso!";
+        }
+        echo '<pre>';
+        var_dump($_SESSION);
+        echo '</pre>';
 }
 
 ?>
