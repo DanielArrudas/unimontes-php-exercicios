@@ -3,40 +3,51 @@
 require_once 'Compromisso.php';
 
 use Exercicio_10\Compromisso;
+session_start();
 if (!isset($_SESSION['compromissos'])) {
     $_SESSION['compromissos'] = [];
 }
 
+function compareCompromissosByDateTime(Compromisso $a, Compromisso $b): int
+{
+    if ($a->getDateTime() == $b->getDateTime()) {
+        return 0;
+    }
+    return ($a->getDateTime() < $b->getDateTime()) ? -1 : 1;
+}
+$mensagemResultado = null;
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
     && !empty($_POST['data']) && !empty($_POST['horario']) && !empty($_POST['descricao'])
 ) {
-    $data = filter_var(preg_replace("([^0-9-])", "", htmlentities($_POST['data'])));
-    $horario = $_POST['horario'];
-    if (strtotime($horario) !== false) {
-        $horario = date('H:i:s', strtotime($horario));
-    } else {
-        $horario = null;
-    }
-    $descricao = htmlspecialchars($_POST['descricao'], ENT_QUOTES, 'UTF-8');
+    $dataInput = $_POST['data'];
+    $horarioInput = $_POST['horario'];
 
-    $choqueCompromisso = false;
-    foreach ($_SESSION['compromissos'] as $compromissoNaSessao) {
-        if ($compromissoNaSessao->getData() === $data && $compromissoNaSessao->getHorario === $horario) {
-            $choqueCompromisso = true;
-            break;
+    $dateTimeObj = DateTime::createFromFormat('Y-m-d H:i', "{$dataInput} {$horarioInput}");
+
+    if ($dateTimeObj && $dateTimeObj->format('Y-m-d H:i') === "{$dataInput} {$horarioInput}") {
+        $descricao = htmlspecialchars($_POST['descricao'], ENT_QUOTES, 'UTF-8');
+        $choqueCompromisso = false;
+        $compromisso = new Compromisso($descricao, $dateTimeObj);
+        foreach ($_SESSION['compromissos'] as $compromissoNaSessao) {
+
+            if (compareCompromissosByDateTime($compromisso, $compromissoNaSessao) === 0) {
+                $choqueCompromisso = true;
+                break;
+            }
         }
-    }
-    if ($choqueCompromisso) {
-            $mensagemResultado = "Erro: Produto já cadastrado.";
+        if ($choqueCompromisso) {
+            $mensagemResultado = "Erro: Choque de compromisso.";
         } else {
-            $compromisso = new Compromisso($data, $horario, $descricao);
-            $_SESSION['compromisso'][] = $compromisso;
+            $_SESSION['compromissos'][] = $compromisso;
             $mensagemResultado = "Compromisso adicionado com sucesso!";
         }
-        echo '<pre>';
-        var_dump($_SESSION);
-        echo '</pre>';
+        usort($_SESSION['compromissos'], 'compareCompromissosByDateTime');
+
+    } else {
+        $mensagemResultado = "Erro: Data ou horário em formato inválido.";
+    }
+
 }
 
 ?>
@@ -63,6 +74,22 @@ if (
         <input type="text" name="descricao" id="descricao" required>
         <button type="submit">Criar</button>
     </form>
+    <hr>
+    <h2>Compromissos Registrados</h2>
+    <?= $mensagemResultado ?>
+    <hr>
+    <?php if (!empty($_SESSION['compromissos'])): ?>
+        <?php foreach ($_SESSION['compromissos'] as $compromisso): ?>
+
+            <?= date_format($compromisso->getDateTime(), 'd/m/Y H:i');
+            ?>
+            <strong><?= $compromisso->getDescricao(); ?></strong><br>
+
+            <hr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Nenhum compromisso registrado no momento.</p>
+    <?php endif; ?>
 </body>
 
 </html>
